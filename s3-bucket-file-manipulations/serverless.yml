@@ -1,0 +1,34 @@
+service: s3-bucket-file-manipulations
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+  deploymentBucket:
+    name: events-s3-test-demo-parth
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:PutObject"
+          Resource: "arn:aws:s3:::events-s3-test-demo-parth/*"
+
+functions:
+  myLambda:
+    handler: handler.main
+    events:
+      - http:
+          path: /
+          method: post
+
+# resources:
+#   Resources:
+#     S3Bucket:
+#       Type: "AWS::S3::Bucket"
+#       Properties:
+#         BucketName: "serverless-deployment-bucket-backend"
+
+plugins:
+  - serverless-webpack
